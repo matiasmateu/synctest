@@ -6,19 +6,30 @@ import {
   FlatList,
   ActivityIndicator,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
+import { useNavigation } from '@react-navigation/native'
 import { fetchUsers } from "../api/fetchUsers";
 
 const HomeScreen = () => {
+  const navigation = useNavigation();
   const { data, error, isLoading, isError } = useQuery({
     queryKey: ["users"],
     queryFn: fetchUsers,
   });
 
+  const unUserPress = ( item ) => {
+    navigation.navigate('Details', {
+        user: item
+    })
+  }
+
   const renderItem = ({ item }) => (
-    <View style={styles.itemContainer}>
-      <Text style={styles.itemText}>{item.name || "No Name Provided"}</Text>
-    </View>
+    <TouchableOpacity onPress={() => unUserPress(item)}>
+        <View style={styles.itemContainer}>
+            <Text style={styles.itemText}>{item.name || "No Name Provided"}</Text>
+        </View>
+    </TouchableOpacity>
   );
 
   if (isLoading) {
